@@ -60,8 +60,8 @@ app.post('/api/todos', function create(req, res) {
    * and respond with the newly created todo.
    */
    var newId = todos.length;
-   newTask = req.body.task;
-   newDesc = req.body.description;
+    newTask = req.body.task;
+    newDesc = req.body.description;
    obj = {"_id": newId, "task": newTask, "description" : newDesc};
    todos.push(obj);
    res.json(todos[newId]);
@@ -105,8 +105,9 @@ app.delete('/api/todos/:id', function destroy(req, res) {
     if (req.param.id== todos[i]._id) {
     todos.splice(todos[i],1);
 
-    }
-    res.json(todos[i]);
+  }  
+    res.json(todos);
+  
    }
 
 });
