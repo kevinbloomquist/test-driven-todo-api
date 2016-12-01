@@ -15,9 +15,9 @@ app.use(express.static(__dirname + '/public'));
 
 // our database is an array for now with some hardcoded values
 var todos = [
-  // { _id: 1, task: 'Laundry', description: 'Wash clothes' },
-  // { _id: 2, task: 'Grocery Shopping', description: 'Buy dinner for this week' },
-  // { _id: 3, task: 'Homework', description: 'Make this app super awesome!' }
+  { _id: 1, task: 'Laundry', description: 'Wash clothes' },
+  { _id: 2, task: 'Grocery Shopping', description: 'Buy dinner for this week' },
+  { _id: 3, task: 'Homework', description: 'Make this app super awesome!' }
 ];
 
 /**********
@@ -52,18 +52,32 @@ app.get('/api/todos/search', function search(req, res) {
 app.get('/api/todos', function index(req, res) {
   /* This endpoint responds with all of the todos
    */
+   res.json({todos:todos});
 });
 
 app.post('/api/todos', function create(req, res) {
   /* This endpoint will add a todo to our "database"
    * and respond with the newly created todo.
    */
+   var newId = todos.length;
+   newTask = req.body.task;
+   newDesc = req.body.description;
+   obj = {"_id": newId, "task": newTask, "description" : newDesc};
+   todos.push(obj);
+   res.json(todos[newId]);
 });
 
 app.get('/api/todos/:id', function show(req, res) {
   /* This endpoint will return a single todo with the
    * id specified in the route parameter (:id)
    */
+  var singleDo = req.params.id-1;
+ res.json(todos[singleDo]);
+ 
+ 
+  
+  
+   
 });
 
 app.put('/api/todos/:id', function update(req, res) {
@@ -71,6 +85,15 @@ app.put('/api/todos/:id', function update(req, res) {
    * id specified in the route parameter (:id) and respond
    * with the newly updated todo.
    */
+   var stealId = req.param.id;
+   for (i = 0; i<todos.length; i++) {
+    if (req.param.id== todos[i].id) {
+      todos[i].task = req.body.task;
+      todos[i].description = req.body.description;
+
+    }
+    res.json(todos[i]);
+   }
 });
 
 app.delete('/api/todos/:id', function destroy(req, res) {
@@ -78,6 +101,14 @@ app.delete('/api/todos/:id', function destroy(req, res) {
    * id specified in the route parameter (:id) and respond
    * with deleted todo.
    */
+   for (i = 0; i<todos.length; i++) {
+    if (req.param.id== todos[i]._id) {
+    todos.splice(todos[i],1);
+
+    }
+    res.json(todos[i]);
+   }
+
 });
 
 /**********
